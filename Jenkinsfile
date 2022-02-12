@@ -19,12 +19,3 @@ pipeline{
             }
         }
     }
-    post{
-        always{
-            //
-        }
-        failure{
-            
-        }
-    }
-}
