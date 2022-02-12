@@ -1,26 +1,32 @@
-pipeline{
-
+pipeline {
     agent any
-    stages{
-        
-        stage('Build'){
-        steps{
-            echo 'construyendo la aplicacion'
-            echo ' aplicacion build'
-        }
+    environment {
+        //be sure to replace "felipelujan" with your own Docker Hub username
+        DOCKER_IMAGE_NAME = "Paola0508/Pruebas Jenkins"
     }
-    stage('test'){
-        steps{
-            echo 'Arranca el proceso de pruebas unitarias'
+    stages {      
+        stage('Build Docker Image') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    app = docker.build(DOCKER_IMAGE_NAME)
+                }
+            }
         }
-    }
-    stage('Deploy'){
-        steps{
-            echo 'desplegando el area de desarrollo'
+        stage('Push Docker Image') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
+            }
         }
-    }
-         }
-
-    
-}
+       
 }
