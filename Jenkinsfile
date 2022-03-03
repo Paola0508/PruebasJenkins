@@ -11,7 +11,7 @@ pipeline{
     }
     stage('test'){
         steps{
-            echo 'Arranca el proceso de pruebas unitarias'
+            
         }
     }
     stage('Deploy'){
